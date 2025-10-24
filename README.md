@@ -159,8 +159,8 @@ for (int row = 0; row < sampleSize; row++) {
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/java-ffm-csv-reader.git
-cd java-ffm-csv-reader
+git clone https://github.com/Bhavya1119/Java-FFM-MMIO.git
+cd Java-FFM-MMIO
 
 # Build with Maven
 mvn clean compile

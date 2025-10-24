@@ -37,8 +37,8 @@ public final class NativeMemory implements AutoCloseable {
     public static NativeMemory mapFile(Path filePath) throws Exception {
         try (FileChannel channel = FileChannel.open(filePath, StandardOpenOption.READ)) {
             long size = channel.size();
-            if (size > Integer.MAX_VALUE) {
-                throw new IllegalArgumentException("File too large: " + size + " bytes");
+            if (size == 0) {
+                throw new IllegalArgumentException("Cannot map empty file");
             }
 
             Arena arena = Arena.ofConfined();

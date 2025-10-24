@@ -76,12 +76,4 @@ public final class NativeMemory implements AutoCloseable {
             }
         }
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        if (!closed) {
-            close();
-        }
-        super.finalize();
-    }
 }

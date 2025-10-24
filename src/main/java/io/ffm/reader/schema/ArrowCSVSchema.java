@@ -8,4 +8,4 @@ import java.util.List;
 /**
  * Author - Bhavya Joshi
  */
-public record ArrowSchema(Schema schema, List<String> headers, List<Types.MinorType> types, long positionAfterSampling) { }
+public record ArrowCSVSchema(Schema schema, List<String> headers, List<Types.MinorType> types) { }

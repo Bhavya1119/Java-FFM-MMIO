@@ -2,7 +2,7 @@ package io.ffm.reader.impl;
 
 import io.ffm.memory.NativeMemory;
 import io.ffm.reader.NativeReadable;
-import io.ffm.reader.schema.ArrowSchema;
+import io.ffm.reader.schema.ArrowCSVSchema;
 import io.ffm.reader.utils.SchemaUtils;
 import org.apache.arrow.memory.RootAllocator;
 import org.apache.arrow.vector.*;
@@ -96,7 +96,7 @@ public class CSVReader implements NativeReadable, AutoCloseable {
      * @return VectorSchemaRoot with parsed data and inferred schema
      */
     private VectorSchemaRoot parseWithSchemaInference(MemorySegment segment, long size) {
-        ArrowSchema schemaResult = SchemaUtils.inferSchema(segment, size, delimiterByte, sampleSize, hasHeader);
+        ArrowCSVSchema schemaResult = SchemaUtils.inferSchema(segment, size, delimiterByte, sampleSize, hasHeader);
 
         Schema schema = schemaResult.schema();
         List<MinorType> types = schemaResult.types();

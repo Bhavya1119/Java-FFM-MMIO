@@ -1,6 +1,6 @@
 package io.ffm.reader.utils;
 
-import io.ffm.reader.schema.ArrowSchema;
+import io.ffm.reader.schema.ArrowCSVSchema;
 import org.apache.arrow.vector.types.Types.MinorType;
 import org.apache.arrow.vector.types.pojo.Field;
 import org.apache.arrow.vector.types.pojo.FieldType;
@@ -32,15 +32,15 @@ public final class SchemaUtils {
 
     private SchemaUtils() {}
 
-    public static ArrowSchema inferSchema(MemorySegment segment, long size,
-                                          byte delimiter, int sampleSize, boolean hasHeader) {
+    public static ArrowCSVSchema inferSchema(MemorySegment segment, long size,
+                                             byte delimiter, int sampleSize, boolean hasHeader) {
         long[] position = {0};
 
         List<String> headers = extractHeaders(segment, size, delimiter, position, hasHeader);
         List<MinorType> types = inferTypes(segment, size, delimiter, position, headers.size(), sampleSize);
         Schema schema = buildSchema(headers, types);
 
-        return new ArrowSchema(schema, headers, types, position[0]);
+        return new ArrowCSVSchema(schema, headers, types);
     }
 
     private static List<String> extractHeaders(MemorySegment segment, long size, byte delimiter, long[] position, boolean hasHeader) {
@@ -299,23 +299,6 @@ public final class SchemaUtils {
             ));
         }
         return new Schema(fields);
-    }
-
-    public static int estimateRowCount(MemorySegment segment, long size) {
-        final long SAMPLE_SIZE = 65536L;
-        long sampleEnd = Math.min(size, SAMPLE_SIZE);
-        int newlineCount = 0;
-
-        for (long i = 0; i < sampleEnd; i++) {
-            if (segment.get(ValueLayout.JAVA_BYTE, i) == LF) {
-                newlineCount++;
-            }
-        }
-
-        if (newlineCount == 0) return 1000;
-
-        long estimatedTotal = (size * newlineCount) / sampleEnd;
-        return (int) Math.min(estimatedTotal * 11 / 10, Integer.MAX_VALUE / 2);
     }
 
 
